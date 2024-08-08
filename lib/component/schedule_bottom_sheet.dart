@@ -2,9 +2,12 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_scheduler/component/custom_text_field.dart';
 import 'package:flutter_calendar_scheduler/const/colors.dart';
+import 'package:flutter_calendar_scheduler/provider/schedule_provider.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../database/drift_database.dart';
+import '../model/schedule_model.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   final DateTime selectedDate;
@@ -78,7 +81,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: onSavePressed,
+                    onPressed: () => onSavePressed(context), // onSavePressed, drift 플러그인을 이용해 내부 데이터베이스를 쓰고 싶을때
                     style: ElevatedButton.styleFrom(
                       backgroundColor: PRIMARY_COLOR,
                     ),
@@ -97,6 +100,26 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   }
 
 
+  void onSavePressed(BuildContext context) async {
+    if(formKey.currentState!.validate()){
+      formKey.currentState!.save();
+
+      context.read<ScheduleProvider>().createSchedule(
+          schedule: ScheduleModel(
+            id: 'new_model',
+            content: content!,
+            date: widget.selectedDate,
+            startTime: startTime!,
+            endTime: endTime!,
+          ),
+      );
+
+      Navigator.of(context).pop();
+    }
+  }
+
+  // drift 플러그인을 이용해 내부 데이터베이스를 쓰고 싶을때
+  /*
   void onSavePressed() async {
     if(formKey.currentState!.validate()){
       formKey.currentState!.save();
@@ -113,6 +136,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
       Navigator.of(context).pop();
     }
   }
+  */
+
 
   // 시간 검증 함수
   String? timeValidator(String? val){

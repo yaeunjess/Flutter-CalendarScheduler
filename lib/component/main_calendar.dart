@@ -11,8 +11,6 @@ class MainCalendar extends StatelessWidget {
     required this.selectedDate,
   });
 
-  // const MainCalendar({super.key});
-
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
