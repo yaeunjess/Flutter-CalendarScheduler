@@ -31,7 +31,7 @@ class ScheduleProvider extends ChangeNotifier{
     cache.update(
       date,
       (value) => resp, /// key(date)에 해당하는 값이 Map(cache)에 있을 때 실행되는 함수
-      // 원래 cache에 있던 key(date)에 매칭되는 value(List<ScheduleModel>)를 다 없애고 서버에서 받아온 정보(List<ScheduleModel>)를 덮어쓴다
+      // 원래 cache에 있던 key(date)에 매칭되는 value(List<ScheduleModel>)값을 다 없애고, 서버에서 받아온 정보(List<ScheduleModel>)를 덮어쓴다.
       ifAbsent: () => resp /// key(date)에 해당하는 값이 Map(cache)에 없을 때 실행되는 함수
     );
 
@@ -78,7 +78,7 @@ class ScheduleProvider extends ChangeNotifier{
       // value 타입은 List<ScheduleModel>이고, e의 타입은 ScheduleModel이다.
       // map 함수는 list에 있는 값들을 순서대로 순회하면서 값을 변경할 수 있다.
       /* e의 id와 우리가 생성한 tempId가 같으면, 서버에서 받아온 id인 savedSchedule만 바꿔서 넣고
-      다르면, 원래 있었던 e를 그대로 넣는다.*/
+                                     다르면, 원래 있었던 e를 그대로 넣는다.*/
     } catch(e) {
       // 2. 생성 실패 시 캐시 롤백하기
       cache.update(
